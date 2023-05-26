@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+group 'com.armemius'
+version 'BETA'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.4'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.14.2'
+    implementation 'org.javatuples:javatuples:1.2'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation 'log4j:log4j:1.2.17'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.armemius.lab7.Client'
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('Lab7-Client-V1.0.1')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}
