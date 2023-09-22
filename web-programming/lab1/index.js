@@ -16,35 +16,16 @@ const viewportMeasureHalfRight = document.getElementById("viewport-measure-half-
 const viewportMeasureHalfLeft = document.getElementById("viewport-measure-half-left")
 const viewportMeasureLeft = document.getElementById("viewport-measure-left")
 
-const isNumber = value => /[+-]?([0-9]*[.])?[0-9]+/.test(value)
+const isNumber = value => /^[+-]?([0-9]*[.])?[0-9]+$/.test(value)
 
 let hitHistory = []
 
-const setCookie = (name, value, days) => {
-    let expires = ""
-    if (days) {
-        const date = new Date()
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
-        expires = "; expires=" + date.toUTCString()
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/"
+const saveField = (name, value) => {
+    localStorage.setItem(name, value);
 }
-const getCookie = name => {
-    const nameEQ = name + "="
-    const ca = document.cookie.split(';')
-    for(let it= 0;it < ca.length; it++) {
-        let c = ca[it]
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1, c.length)
-        }
-        if (c.indexOf(nameEQ) === 0) {
-            return c.substring(nameEQ.length,c.length)
-        }
-    }
-    return null
-}
-const eraseCookie = name => {
-    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+
+const getField = name => {
+    return localStorage.getItem(name)
 }
 
 const getData = () => {
@@ -122,7 +103,7 @@ const appendRow = data => {
         node.appendChild(it)
     })
 
-    table.appendChild(node)
+    table.insertBefore(node, table.children[1])
 }
 
 const updateValues = () => {
@@ -159,11 +140,11 @@ const HITS_SAVE_LOCATION = "saved_hits"
 const FORM_SAVE_LOCATION = "saved_form"
 
 const saveData = () => {
-    setCookie(HITS_SAVE_LOCATION, btoa(encodeURI(JSON.stringify(hitHistory))), 7)
+    saveField(HITS_SAVE_LOCATION, btoa(encodeURI(JSON.stringify(hitHistory))))
 }
 
 const restoreForm = () => {
-    const data = getCookie(FORM_SAVE_LOCATION)
+    const data = getField(FORM_SAVE_LOCATION)
     if (!data) {
         return
     }
@@ -175,7 +156,7 @@ const restoreForm = () => {
 
 const saveForm = () => {
     const data = getData()
-    setCookie(FORM_SAVE_LOCATION, btoa(encodeURI(JSON.stringify(data))), 7)
+    saveField(FORM_SAVE_LOCATION, btoa(encodeURI(JSON.stringify(data))))
 }
 
 const addDataToStorage = data => {
@@ -210,7 +191,7 @@ const clearForm = () => {
 }
 
 const restoreStorage = () => {
-    const data = getCookie(HITS_SAVE_LOCATION)
+    const data = getField(HITS_SAVE_LOCATION)
     if (!data) {
         return
     }
@@ -241,3 +222,14 @@ const sendData = async ev => {
 
 restoreStorage()
 restoreForm()
+updateValues()
+
+const processChanges = () => {
+    saveForm()
+    updateValues()
+}
+
+form.onclick = processChanges
+xForm.onchange = processChanges
+yForm.oninput = processChanges
+rForm.onchange = processChanges
