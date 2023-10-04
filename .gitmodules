@@ -1,6 +1,3 @@
 [submodule "programming/lab8"]
 	path = programming/lab8
 	url = https://github.com/Corrupted-org/ProgrammingLab8
-[submodule "programming-languages/assignment-1-io-library"]
-	path = programming-languages/assignment-1-io-library
-	url = https://gitlab.se.ifmo.ru/Armemius/assignment-1-io-library
