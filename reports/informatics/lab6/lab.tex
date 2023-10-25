@@ -1,0 +1,26 @@
+\documentclass[a5paper]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx, setspace, amsmath, multicol}
+\usepackage[fontsize=6.5pt]{fontsize}
+\graphicspath{ {./} }
+
+\usepackage[
+top = 1.25cm,
+bottom = 2.0cm,
+left = 1.3cm,
+right = 1.3cm]{geometry}
+
+\begin{document}
+    % Title list 
+    \include{report.tex}
+    % Main task
+    \include{task.tex}
+    % Additional task
+    \newgeometry{top=1.25cm,
+        left=0.5cm,
+        right=0.5cm,
+        bottom=2cm
+    }
+\end{document}
