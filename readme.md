@@ -18,7 +18,7 @@
 - Программирование ([Отчёты](./reports/programming/semester-2/) / [Лабораторные](./programming/semester-2/))
 - ОПД ([Отчёты](./reports/fpa/semester-2/))
 - Дискретная математика ([Домашние задания и курсовые](./reports/dicrete-maths/semester-2/))
-- Базы данных <span style="color:red;">[ДАННЫЕ УТЕРЯНЫ]</span>
+- Базы данных ${\color{red}\text{[ Данные удалены ]}}$
 
 ## II курс
 
