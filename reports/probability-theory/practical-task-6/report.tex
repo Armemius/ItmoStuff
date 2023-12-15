@@ -1,0 +1,154 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx, setspace, amsmath}
+
+\usepackage[
+top = 1.25cm, 
+bottom = 2.0cm]{geometry}
+
+\begin{document}
+\begin{titlepage} 
+	\centering
+    % HEADER
+	{
+        \scshape
+        Федеральное государственное автономное образовательное учреждение высшего образования
+        \par
+        \textbf{«Научно-образовательная корпорация ИТМО»}
+        \par
+        \vspace*{1cm}
+        Факультет Программной Инженерии и Компьютерной Техники
+        \par
+    }
+    % LOGO
+    \vspace*{0.6cm}
+    \includegraphics[width=\textwidth]{logo.png}
+    % LAB INFO
+    {
+        \Large
+        \textbf{Практическая работа №6}
+        \par
+        \normalsize
+        \vspace*{0.75cm}
+        \textbf{Вариант 12}
+        \par
+    }
+    \vfill
+    % СREDITS
+    \hfill\begin{minipage}{\dimexpr\textwidth-7.8cm}
+        \textbf{Выполнил:}\par
+        Степанов Арсений Алексеевич\par
+        \vspace*{0.15cm}
+        \textbf{Группа:}\par
+        ТеорВер 2.4\par
+        \vspace*{0.15cm}
+        \textbf{Преподаватель:}\par
+        Селина Елена Георгиевна\par
+    \end{minipage}
+    \vfill
+    Санкт-Петербург, \the\year{}г.
+\end{titlepage}  
+\section*{Задание №1}
+Дана выборка: $3.6\;3.9\;4.5\;3.8\;4.4\;4.9\;4.2\;3.8$ \\
+\hfill\break
+Построить доверительный интервал оценки генеральной средней при заданной доверительной вероятности $\gamma = 0.95$
+\subsection*{Решение}
+Размер выборки $n < 30$, поэтому воспользуемся следующей формулой:
+$$\overline{X}-t_\frac{{\gamma + 1}}{2}(n-1)\frac{S}{\sqrt{n}}<m<\overline{X}+{t_\frac{\gamma + 1}{2}}(n-1)\frac{S}{\sqrt{n}}$$
+Рассчитаем $\overline{X}$:
+$$\overline{X}=\frac{1}{n}\sum_{i=1}^n x_i=\frac{31.1}{8}=4.1375$$
+Рассчитаем $D(X)$:
+$$D(X)=\frac{1}{n}\sum_{i=1}^n x_i^2-\overline{X}^2=\frac{138.31}{8}-17.1189=0.16985$$
+Рассчитаем $S$:
+$$S=\sqrt{\frac{n}{n-1}\cdot D(X)}=\sqrt{\frac{8}{7}\cdot 0.16985}=0.44058$$
+Находим квантиль:
+$$\gamma=0.99, n=8\qquad\frac{1 + 0.99}{2}=0.995\qquad t_{0.995}(7)=3.499$$
+Найдём доверительный интервал:
+$$4.1375-3.499\cdot\frac{0.44058}{2.64575} < m < 4.1375+3.499\cdot\frac{0.44058}{2.64575}$$
+$$3.555 < m < 4.531$$
+\section*{Задание №2}
+$n=100$, $\overline{X}=748$, $\sigma=3.6$, $\gamma=0.95$\\
+\hfill\break
+Построить доверительный интервал оценки генеральной средней при заданной доверительной вероятности $\gamma = 0.95$
+\subsection*{Решение}
+Размер выборки $n > 30$, поэтому воспользуемся следующей формулой:
+$$\overline{X}-\frac{t_\gamma\sigma}{\sqrt{n}} < m < \overline{X}+\frac{t_\gamma\sigma}{\sqrt{n}}$$
+Найдём квантиль:
+$$\gamma=0.95\qquad\frac{1+0.95}{2}=0.975\qquad t=1.96$$
+Найдём доверительный интервал:
+$$748-\frac{1.96\cdot 3.6}{10} < m < 748+\frac{1.96\cdot 3.6}{10}$$
+$$747.2944 < m < 748.7056$$
+\section*{Задание №3}
+Распределение семян сорняков в выборках семян тимофеевки:\\
+\hfill\break
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    Число семян сорняков & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+    \hline
+    Число выборок & 3 & 17 & 26 & 16 & 18 & 9 & 3 & 5 & 0 & 1 \\
+    \hline
+\end{tabular}\\
+\hfill\break
+При заданном уровне значимости $\alpha=0.1$ проверить гипотезу о том, что выборка имеет распределение Пуассона
+\subsection*{Решение}
+Найдём выборочное среднее, чтобы оценить параметр $\lambda$:
+$$\lambda=\frac{\sum_{i=0}^{n}(x_i\cdot i)}{\sum_{i=0}^{n}}=\frac{296}{98}=3.02$$
+\hfill\break
+\begin{center}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        $i$ & $n_i$ & $p_i$ & $n_i^*$ \\
+        \hline
+        0 & 3 & 0.04878 & 5 \\
+        \hline
+        1 & 17 & 0.14733 & 14 \\ % + 
+        \hline
+        2 & 26 & 0.22251 & 22 \\
+        \hline
+        3 & 16 & 0.22402 & 22 \\
+        \hline
+        4 & 18 & 0.16916 & 17 \\
+        \hline
+        5 & 9 & 0.10218 & 10 \\
+        \hline
+        6 & 3 & 0.05144 & 5 \\
+        \hline
+        7 & 5 & 0.02219 & 2 \\
+        \hline
+        8 & 0 & 0.00838 & 1 \\
+        \hline
+        9 & 1 & 0.00281 & 0 \\
+        \hline
+        $\sum$ & 98 & - & 98 \\
+        \hline
+    \end{tabular}
+\end{center}
+Объединим строки, которые не удовлетворяют условию $p_in\geq 9$, т.е. такие строки где $p_i < 0.092$
+\begin{center}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        $i$ & $n_i$ & $n_i^*$ & $\frac{(n_i-n_i^*)^2}{n_i^*}$ \\
+        \hline
+        $\leq 1$ & 20 & 19 & 0.05263 \\
+        \hline
+        2 & 26 & 22 & 0.72727 \\
+        \hline
+        3 & 16 & 22 & 1.63636 \\
+        \hline
+        4 & 18 & 17 & 0.05882 \\
+        \hline
+        $\geq 5$ & 18 & 18 & 0.0 \\
+        \hline
+        $\sum$ & 98 & 98 & 2.47509 \\
+        \hline
+    \end{tabular}
+\end{center}
+Таким образом получаем, что $\chi^2_\text{набл}=2.47509$\\
+\hfill\break
+Найдём табличное значение $\chi^2_\text{крит}$:
+$$\chi^2_\text{крит}=\chi^2_{1-\alpha}(k-l-1)=\chi^2_{0.99}(5-1-1)=\chi^2_{0.99}(3)=11.3$$
+
+Получаем, что $\chi^2_\text{крит} > \chi^2_\text{набл}$
+\end{document}
