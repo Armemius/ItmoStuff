@@ -7,6 +7,7 @@
     font-family: 'Handjet', sans-serif;
     user-select: none;
     color: red;
+    white-space: nowrap;
 }
 
 textarea:focus,
@@ -16,6 +17,7 @@ input:focus {
 
 body {
     background: black;
+    overflow-x: hidden;
 }
 
 .static-fullscreen {
@@ -52,6 +54,7 @@ body {
     align-items: center;
     background: black;
     z-index: 450;
+    pointer-events: none;
 }
 
 .modal-response.fading {
@@ -173,6 +176,14 @@ main > section > h2 {
     border: 2px solid transparent;
 }
 
+.work-indicator.active {
+    opacity: 100%;
+    color: black;
+    background: #c29200;
+    border: 2px solid transparent;
+    text-shadow: none !important;
+}
+
 .error-indicator.active {
     opacity: 100%;
     color: black;
@@ -255,11 +266,30 @@ input[type="button"].active {
     color: white;
 }
 
+.viewport {
+    grid-row: span 2;
+}
+
 .viewport-content {
     width: 500px;
     height: 500px;
     position: relative;
     cursor: pointer;
+}
+
+.shot-history-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.shot-history-container div {
+    position: absolute;
+    background: white;
+    width: 4px;
+    height: 4px;
 }
 
 .viewport-measure {
@@ -435,9 +465,11 @@ input[type="button"].active {
     color: white;
     background: red;
     font-size: 100px;
-    z-index: 450;
+    z-index: 1000;
     animation: fade 2s linear forwards, commonTextShadow 1.6s linear infinite;
 }
+
+
 
 @keyframes errorIndicator {
     0% {
@@ -474,27 +506,27 @@ input[type="button"].active {
 
 @keyframes hitFlicker {
     0% {
-        visibility: hidden;
+        display: none;
     }
 
     10% {
-        visibility: visible;
+        display: block;
     }
 
     20% {
-        visibility: hidden;
+        display: none;
     }
 
     30% {
-        visibility: visible;
+        display: block;
     }
 
     40% {
-        visibility: hidden;
+        display: none;
     }
 
     50% {
-        visibility: visible;
+        display: block;
         opacity: 100%;
     }
 
@@ -504,5 +536,15 @@ input[type="button"].active {
 
     100% {
         opacity: 0;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    main > section {
+        width: min-content;
     }
 }

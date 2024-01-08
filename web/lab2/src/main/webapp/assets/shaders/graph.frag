@@ -67,7 +67,7 @@ void main() {
     // Render figures
     if (checkCircle(uv) || checkTriangle(uv) || checkRectangle(uv)) {
         if (state == 1.0) {
-            gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+            gl_FragColor = vec4(0.0, 0.8, 0.0, 1.0);
         } else if (state == 2.0) {
             if (mod(uv.x + uv.y, 3.0) < 0.05) {
                 gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);

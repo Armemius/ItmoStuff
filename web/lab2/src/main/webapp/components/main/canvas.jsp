@@ -17,6 +17,7 @@
         <span id="viewport-measure-half-right" class="viewport-measure" half-right>R/2</span>
         <span id="viewport-measure-half-left" class="viewport-measure" half-left>-R/2</span>
         <span id="viewport-measure-left" class="viewport-measure" left>-R</span>
+        <div id="shot-history-container" class="shot-history-container"></div>
         <div id="viewport-warning-sign" class="viewport-warning-sign">
             <img src="assets/ahtung.png" alt="warning-sign">
         </div>

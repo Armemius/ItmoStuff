@@ -47,7 +47,13 @@ class AreaCheckServlet : HttpServlet() {
         return """(0.\d*)|(4.0*[^0]+\d*)""".toRegex().matches(value)
     }
 
-    @OptIn(ExperimentalTime::class)
+    private fun concat(value: String): String {
+        if (value.length < 5) {
+            return value
+        }
+        return value.substring(0 .. 4)
+    }
+
     @Throws(ServletException::class, IOException::class)
     public override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
         val start = System.nanoTime()
@@ -81,9 +87,9 @@ class AreaCheckServlet : HttpServlet() {
             out.print("R value cannot be converted to double")
             return
         }
-        val xValue = x.toDouble()
-        val yValue = y.toDouble()
-        val rValue = r.toDouble()
+        val xValue = x.replace(",", ".").toDouble()
+        val yValue = y.replace(",", ".").toDouble()
+        val rValue = r.replace(",", ".").toDouble()
 
         if (-5.0 > xValue || xValue > 3) {
             response.contentType = "text/plain; charset=utf-8"
@@ -111,9 +117,9 @@ class AreaCheckServlet : HttpServlet() {
         response.status = 200
 
         val responseData = ResponseData(
-            xValue,
-            yValue,
-            rValue,
+            concat(x).toDouble(),
+            concat(y).toDouble(),
+            concat(r).toDouble(),
             hitStatus,
             SimpleDateFormat("hh:mm:ss dd.MM.yyyy").format(Date()),
             end - start

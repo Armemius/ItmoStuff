@@ -1,5 +1,14 @@
-modalButtonYes.onclick = processModalResponse("Психопат")
-modalButtonNo.onclick = processModalResponse("Молодец")
+const queryString = window.location.search
+const urlParams = new URLSearchParams(queryString)
+
+if (urlParams.get('modal') === 'false') {
+    modalResponseContainer?.remove()
+    modalResponse?.remove()
+    modal?.remove()
+} else {
+    modalButtonYes.onclick = processModalResponse("Психопат")
+    modalButtonNo.onclick = processModalResponse("Молодец")
+}
 
 buttons.forEach((it, index) => {
     it.onclick = () => {
@@ -30,7 +39,7 @@ resetButton.onclick = () => {
     saveForm()
 }
 
-submitButton.onclick = processHit
+submitButton.onclick = ev => processHit(ev, null, true)
 
 resetTableButton.onclick = () => {
     const messages = [

@@ -12,9 +12,9 @@
         <script defer src="script/controller.js"></script>
     </head>
     <body>
-        <jsp:include page="components/filter.jsp" />
-        <jsp:include page="components/modal/modal.jsp" />
-        <jsp:include page="components/header.jsp" />
-        <jsp:include page="components/main/main.jsp" />
+        <jsp:include page="/components/filter.jsp" />
+        <jsp:include page="/components/modal/modal.jsp" />
+        <jsp:include page="/components/header.jsp" />
+        <jsp:include page="/components/main/main.jsp" />
     </body>
 </html>

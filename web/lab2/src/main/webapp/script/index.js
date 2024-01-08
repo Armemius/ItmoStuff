@@ -20,6 +20,7 @@ const resetButton = document.getElementById("form-reset-button")
 // Control indicators
 const warningSign = document.getElementById("viewport-warning-sign")
 const readyIndicator = document.getElementById("ready-indicator")
+const workIndicator = document.getElementById("work-indicator")
 const errorIndicator = document.getElementById("error-indicator")
 
 // Form buttons
@@ -39,6 +40,7 @@ const viewportMeasureHalfRight = document.getElementById("viewport-measure-half-
 const viewportMeasureHalfLeft = document.getElementById("viewport-measure-half-left")
 const viewportMeasureLeft = document.getElementById("viewport-measure-left")
 const viewport = document.getElementById("viewport-content")
+const shotHistoryContainer = document.getElementById("shot-history-container")
 
 // Table
 const table = document.getElementById("table")
@@ -104,6 +106,21 @@ const appendRow = data => {
     table.insertBefore(node, table.children[1])
 }
 
+const updateShotHitHistory = () => {
+    shotHistoryContainer.innerHTML = ""
+    for (const hit of hitHistory) {
+        const node = document.createElement("div")
+        const data = getData()
+        const offsetX = hit.x * 200 / data.r + 250
+        const offsetY = -hit.y * 200 / data.r + 250
+        node.style.left = `${offsetX - 2}px`
+        node.style.top = `${offsetY - 2}px`
+        if (0 < offsetX && offsetX < 500 && 0 < offsetY && offsetY < 500) {
+            shotHistoryContainer.appendChild(node)
+        }
+    }
+}
+
 const isNumber = value => /^[+-]?([0-9]*[.])?[0-9]+$/.test(value)
 
 const save = (name, value) => {
@@ -115,38 +132,47 @@ const restore = name => {
 }
 
 const restoreForm = () => {
-    const data = restore(FORM_SAVE_LOCATION)
-    if (!data) {
-        return
-    }
-    const {x, y, r} = JSON.parse(decodeURI(atob(data)))
-    xForm.value = x
-    yForm.value = y
-    rForm.value = r
-
-    if (!isNumber(x)) {
-        return
-    }
-
-    buttonValues.forEach((it, index) => {
-        if (Number(x) === it) {
-            buttons[index].classList.add("active")
-        } else {
-            buttons[index].classList.remove("active")
-        }
-    })
+    fetch("form_data")
+        .then(response => response.text())
+        .then(data => {
+            const {x, y, r} = JSON.parse(decodeURI(atob(data)))
+            xForm.value = x
+            yForm.value = y
+            rForm.value = r
+            if (!isNumber(x)) {
+                return
+            }
+            buttonValues.forEach((it, index) => {
+                if (Number(x) === it) {
+                    buttons[index].classList.add("active")
+                } else {
+                    buttons[index].classList.remove("active")
+                }
+            })
+            validate()
+        }).catch(() => {})
 }
 
 const saveForm = () => {
     const data = getData()
-    save(FORM_SAVE_LOCATION, btoa(encodeURI(JSON.stringify(data))))
+    fetch('form_data', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        body: btoa(encodeURI(JSON.stringify(data)))
+    })
+        .then(response => response.text())
+        .then(body => {
+            updateShotHitHistory()
+        })
 }
 
 const getData = () => {
     return {
-        x: xForm.value,
-        y: yForm.value,
-        r: rForm.value
+        x: xForm.value.replace(",", "."),
+        y: yForm.value.replace(",", "."),
+        r: rForm.value.replace(",", ".")
     }
 }
 
@@ -227,9 +253,9 @@ const processModalResponse = message => {
     }
 }
 
-const sendData = async ev => {
+const sendData = async (ev, data) => {
     ev.preventDefault()
-    const requestData = getData()
+    const requestData = data ?? getData()
 
     if (!isValid(requestData)) {
         return
@@ -248,28 +274,41 @@ const sendData = async ev => {
     return responseData.result
 }
 
-const restoreTable = () => {
-    const data = restore(HITS_SAVE_LOCATION)
-    if (!data) {
-        return
-    }
-    hitHistory = JSON.parse(decodeURI(atob(data)))
-    hitHistory.forEach(rowData => {
-        appendRow(rowData)
-    })
+let restoreTable = () => {
+    fetch("table_data")
+        .then(response => response.text())
+        .then(data => {
+            hitHistory = JSON.parse(decodeURI(atob(data)))
+            hitHistory.forEach(rowData => {
+                appendRow(rowData)
+            })
+            updateShotHitHistory()
+        }).catch(() => {})
 }
 
 const saveData = () => {
-    save(HITS_SAVE_LOCATION, btoa(encodeURI(JSON.stringify(hitHistory))))
+    fetch('table_data', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        body: btoa(encodeURI(JSON.stringify(hitHistory)))
+    })
+        .then(response => response.text())
+        .then(body => {
+            console.log(body)
+        })
 }
 
 const addDataToStorage = data => {
     hitHistory = [...hitHistory, data]
+    updateShotHitHistory()
     saveData()
 }
 
 const clearTable = () => {
     hitHistory = []
+    updateShotHitHistory()
     saveData()
     table.innerHTML = `
         <div class="row legend">
@@ -313,5 +352,11 @@ const processViewportClick = ev => {
     })
     xForm.value = x
     yForm.value = y
+
+    processHit(ev, {
+        x: (ev.clientX - rect.left - 250) / 200 * Number(r),
+        y: y,
+        r: r
+    })
     validate()
 }

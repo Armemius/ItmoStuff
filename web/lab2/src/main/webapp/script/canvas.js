@@ -48,11 +48,14 @@ const instantiateProgram = async () => {
     return program
 }
 
-const processHit = ev => {
+let lastTimeoutId = null
+const processHit = (ev, data, redirect) => {
     ev.preventDefault();
 
-    sendData(ev).then(result => {
+    sendData(ev, data).then(result => {
+        clearTimeout(lastTimeoutId)
         const node = document.createElement("div")
+        workIndicator.classList.add("active")
         node.classList.add("hit-result-decoration")
         node.innerHTML = `
             <div class="hit-result-decoration-square"></div>
@@ -63,16 +66,18 @@ const processHit = ev => {
                 <div>Результат: ${result ? "Попадание" : "Промах"}</div>
             </div>
         `
-        //
-        const data = getData()
-        //
-        node.style.left = `${data.x * 200 / data.r + 250 - 4}px`
-        node.style.top = `${-data.y * 200 / data.r + 250 - 70 + 4}px`
-        //
-        viewport.appendChild(node)
-        // setTimeout(() => {
-        //     node.remove()
-        // }, 2000)
+        data = data ?? getData()
+        const offsetX = data.x * 200 / data.r + 250
+        const offsetY = -data.y * 200 / data.r + 250
+        node.style.left = `${offsetX - 4}px`
+        node.style.top = `${offsetY - 70 + 4}px`
+        if (0 < offsetX && offsetX < 500
+            && 0 < offsetY && offsetY < 500) {
+            viewport.appendChild(node)
+            setTimeout(() => {
+                node.remove()
+            }, 2000)
+        }
 
         if (result) {
             state = 1
@@ -83,8 +88,15 @@ const processHit = ev => {
         state = 2
     }).finally(() => {
         lastTimeAttempt = performance.now()
-        setTimeout(() => {
+        lastTimeoutId = setTimeout(() => {
+            workIndicator.classList.remove("active")
             state = 0
+            if (redirect) {
+                displayMessage("Загрузка таблицы...")
+                setTimeout(() => {
+                    window.location.href = "./table";
+                }, 100)
+            }
         }, 1000)
     })
 }
